@@ -1,0 +1,5 @@
+[book]
+authors = ["Masaki Hara"]
+multilingual = false
+src = "src"
+title = "Guessing Games: Async"
