@@ -1,0 +1,606 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>async/awaitを使う - Guessing Games: Async</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <noscript>
+            <style type="text/css">
+                .javascript-only {
+                    display: none;
+                }
+            </style>
+        </noscript>
+
+    </head>
+    <body class="light">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme;
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li><a href="get-nightly.html"><strong aria-hidden="true">1.</strong> まずはnightlyを入れる</a></li><li><a href="edition-2018.html"><strong aria-hidden="true">2.</strong> 2019年風のRustに衣替え</a></li><li><a href="tokio.html"><strong aria-hidden="true">3.</strong> tokioのランタイムを起動する</a></li><li><a href="async-await.html" class="active"><strong aria-hidden="true">4.</strong> async/awaitを使う</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons javascript-only">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">Guessing Games: Async</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="searchbar-outer" class="searchbar-outer">
+                    <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                </div>
+                <div id="searchresults-outer" class="searchresults-outer">
+                    <div class="searchresults-header" id="searchresults-header"></div>
+                    <ul id="searchresults">
+                    </ul>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="async-await.html#asyncawaitを使う" id="asyncawaitを使う"><h1>async/awaitを使う</h1></a>
+<p><a href="./tokio.md">前の章</a> のコードはブロッキング処理をtokioに食わせているのでとても行儀が悪いです。これに対処するには3つの方法があります。</p>
+<ul>
+<li>ノンブロッキングな処理に置き換える。 (正攻法)</li>
+<li><a href="https://docs.rs/tokio-threadpool/0.1/tokio_threadpool/fn.blocking.html"><code>tokio_threadpool::blocking</code></a>を使う。 (ブロッキングI/Oをどうしても使う必要があるときの方法)</li>
+<li><a href="https://docs.rs/futures-cpupool/0.1.8/futures_cpupool/index.html"><code>futures_cpupool</code></a>を使う。 (CPU中心の処理をイベントループから退避させる場合に最適な方法)</li>
+</ul>
+<p>今回は正攻法を使いましょう。</p>
+<p>とは言っても、このまま安定版の方法を使っていると<a href="http://callbackhell.com/">コールバック地獄</a>に突入してしまいます。そこで、近未来的な不安定版機能のasync/awaitを使いましょう!</p>
+<a class="header" href="async-await.html#futures-previewを使う" id="futures-previewを使う"><h2>futures-previewを使う</h2></a>
+<p>さて、ここで悲しいお知らせがあります。現行のエコシステムで使われている <code>future::Future</code> 型と、async/awaitが使う <code>std::future::Future</code> には互換性がありません。</p>
+<p>後者を扱うためのライブラリは <code>futures-preview</code> の0.3系列です。現行のシステムは <code>futures</code> の0.1系列で、0.2は色々な理由があって欠番になりました。</p>
+<p>0.1系列の <code>Future</code> と 0.3系列の <code>Future</code> に互換性はありませんが、互いを行き来するための手段が <code>futures-preview</code> に実装されているので、それを使うことにしましょう。</p>
+<p><code>Cargo.toml</code> に以下の2行を追加します。</p>
+<pre><code class="language-toml">[dependencies]
+...
+pin-utils = &quot;0.1.0-alpha.1&quot;
+# 互換性機能 &quot;tokio-compat&quot; はデフォルト無効なので有効化しておく
+futures-preview = { version = &quot;0.3.0-alpha.3&quot;, features = [&quot;tokio-compat&quot;] }
+</code></pre>
+<p>そういえば<code>futures-preview</code> のAPIドキュメントがありませんね。 <code>cargo doc</code> で生成しておくといいでしょう。</p>
+<pre><code>$ cargo doc --open
+</code></pre>
+<a class="header" href="async-await.html#futures-previewを使う2" id="futures-previewを使う2"><h2>futures-previewを使う(2)</h2></a>
+<p>futures-previewを使いたいので、以下のインポートを追加しておきます。</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+use futures::prelude::*;
+use futures::compat::{Future01CompatExt, Stream01CompatExt, TokioDefaultSpawn};
+#}</code></pre></pre>
+<p>逆に、 <code>tokio::prelude::*</code> のインポートはfutures-preview 0.3系列と衝突してしまうため、名前を変えておきます。</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+// use tokio::prelude::*;
+use tokio::prelude::{Stream as Stream01, Future as Future01, future as future01};
+#}</code></pre></pre>
+<p>あわせて、 <code>future::ok</code> と <code>future::lazy</code> も <code>future01::ok</code> と <code>future01::lazy</code> に変えておきます。</p>
+<a class="header" href="async-await.html#asyncブロックを使う" id="asyncブロックを使う"><h2>asyncブロックを使う</h2></a>
+<p>async/awaitを使うために、ソースコードの先頭にfeature宣言を足します。</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#![feature(async_await, await_macro, futures_api, pin)]
+
+#fn main() {
+// ...
+#}</code></pre></pre>
+<p><code>tokio::run</code> で囲った部分を以下のように書き換えます。</p>
+<pre><pre class="playpen"><code class="language-rust">fn main() {
+    tokio::run(async {
+        // ...
+
+        Ok(())
+    }.boxed().compat());
+}
+</code></pre></pre>
+<p><code>async</code> ブロックが出てきたので、これで <code>await!( ... )</code> が使える状態になりました。</p>
+<a class="header" href="async-await.html#awaitを使ってみる" id="awaitを使ってみる"><h2>awaitを使ってみる</h2></a>
+<p>ブロッキングI/Oをなくすにはもう少し手間がかかるので、まずは簡単なawaitを入れてみましょう。</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+
+#fn main() {
+// ...
+
+use tokio::timer::{Delay, Interval};
+
+        // ...
+
+        loop {
+            await!(Delay::new(Instant::now() + Duration::from_millis(500)).compat());
+
+            println!(&quot;Please input your guess.&quot;);
+
+            // ...
+#}</code></pre></pre>
+<p>この <code>await!</code> の位置でプログラムは0.5秒停止したかのように動作するはずです。実際には、この位置でいったん呼び出し元に復帰し、0.5秒後にここに戻ってきて処理を再開するという処理が動いています。</p>
+<a class="header" href="async-await.html#a標準入力をasyncにする" id="a標準入力をasyncにする"><h2>標準入力をasyncにする</h2></a>
+<p>標準入力を非同期にするには <a href="https://crates.io/crates/tokio-stdin-stdout"><code>tokio-stdin-stdout</code></a> や <a href="https://crates.io/crates/tokio-file-unix"><code>tokio-file-unix</code></a> が使えます。Windowsユーザーのことも考えてここでは <code>tokio-stdin-stdout</code> を使ってみます。</p>
+<p><code>Cargo.toml</code> に以下の行を追加します。</p>
+<pre><code class="language-toml">[dependencies]
+...
+tokio-stdin-stdout = &quot;0.1.4&quot;
+</code></pre>
+<p>標準入力をあらかじめ非同期入力に変換しておく必要があります。</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+use std::io::BufReader;
+
+
+        // ...
+        }).map_err(|_| panic!(&quot;timer error&quot;)));
+
+        let stdio = tokio_stdin_stdout::stdin(0);
+        let stdio = BufReader::new(stdio);
+        let lines = tokio::io::lines(stdio).compat();
+
+        println!(&quot;Guess the number!&quot;);
+        // ...
+#}</code></pre></pre>
+<p><code>StreamExt</code> の <code>next</code> メソッドで 1行ずつ取り出すことができます。これはFutureを返すので、 <code>await!</code> で包みます。</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+            // ...
+            println!(&quot;Please input your guess.&quot;);
+
+            let guess = await!(lines.next())
+                .expect(&quot;End of input&quot;)
+                .expect(&quot;I/O error&quot;);
+
+            let guess: u32 = match guess.trim().parse() {
+            // ...
+#}</code></pre></pre>
+<p>この状態でコンパイルすると巨大なエラーが出力されます。</p>
+<pre><code>error[E0277]: the trait bound `(dyn futures::task_impl::std::Unpark + 'static): std::marker::Unpin` is not satisfied in `futures_util::compat::compat::Compat&lt;tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;, ()&gt;`
+  --&gt; src/main.rs:35:38
+   |
+35 |             let guess = await!(lines.next())
+   |                                      ^^^^ within `futures_util::compat::compat::Compat&lt;tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;, ()&gt;`, the trait `std::marker::Unpin` is not implemented for `(dyn futures::task_impl::std::Unpark + 'static)`
+   |
+   = note: required because it appears within the type `std::marker::PhantomData&lt;(dyn futures::task_impl::std::Unpark + 'static)&gt;`
+   = note: required because it appears within the type `std::sync::Arc&lt;(dyn futures::task_impl::std::Unpark + 'static)&gt;`
+   = note: required because it appears within the type `futures::task_impl::std::TaskUnpark`
+   = note: required because it appears within the type `futures::task_impl::Task`
+   = note: required because it appears within the type `std::option::Option&lt;futures::task_impl::Task&gt;`
+   = note: required because it appears within the type `futures::sync::mpsc::ReceiverTask`
+   = note: required because it appears within the type `std::cell::UnsafeCell&lt;futures::sync::mpsc::ReceiverTask&gt;`
+   = note: required because it appears within the type `std::sync::Mutex&lt;futures::sync::mpsc::ReceiverTask&gt;`
+   = note: required because it appears within the type `futures::sync::mpsc::Inner&lt;std::boxed::Box&lt;[u8]&gt;&gt;`
+   = note: required because it appears within the type `std::marker::PhantomData&lt;futures::sync::mpsc::Inner&lt;std::boxed::Box&lt;[u8]&gt;&gt;&gt;`
+   = note: required because it appears within the type `std::sync::Arc&lt;futures::sync::mpsc::Inner&lt;std::boxed::Box&lt;[u8]&gt;&gt;&gt;`
+   = note: required because it appears within the type `futures::sync::mpsc::Receiver&lt;std::boxed::Box&lt;[u8]&gt;&gt;`
+   = note: required because it appears within the type `tokio_stdin_stdout::ThreadedStdin`
+   = note: required because it appears within the type `std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;`
+   = note: required because it appears within the type `tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;`
+   = note: required because it appears within the type `futures_util::compat::compat::Compat&lt;tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;, ()&gt;`
+
+error[E0277]: the trait bound `(dyn futures::task_impl::UnsafeNotify + 'static): std::marker::Unpin` is not satisfied in `futures_util::compat::compat::Compat&lt;tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;, ()&gt;`
+  --&gt; src/main.rs:35:38
+   |
+35 |             let guess = await!(lines.next())
+   |                                      ^^^^ within `futures_util::compat::compat::Compat&lt;tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;, ()&gt;`, the trait `std::marker::Unpin` is not implemented for `(dyn futures::task_impl::UnsafeNotify + 'static)`
+   |
+   = note: required because it appears within the type `*mut (dyn futures::task_impl::UnsafeNotify + 'static)`
+   = note: required because it appears within the type `futures::task_impl::NotifyHandle`
+   = note: required because it appears within the type `futures::task_impl::core::TaskUnpark`
+   = note: required because it appears within the type `futures::task_impl::std::TaskUnpark`
+   = note: required because it appears within the type `futures::task_impl::Task`
+   = note: required because it appears within the type `std::option::Option&lt;futures::task_impl::Task&gt;`
+   = note: required because it appears within the type `futures::sync::mpsc::ReceiverTask`
+   = note: required because it appears within the type `std::cell::UnsafeCell&lt;futures::sync::mpsc::ReceiverTask&gt;`
+   = note: required because it appears within the type `std::sync::Mutex&lt;futures::sync::mpsc::ReceiverTask&gt;`
+   = note: required because it appears within the type `futures::sync::mpsc::Inner&lt;std::boxed::Box&lt;[u8]&gt;&gt;`
+   = note: required because it appears within the type `std::marker::PhantomData&lt;futures::sync::mpsc::Inner&lt;std::boxed::Box&lt;[u8]&gt;&gt;&gt;`
+   = note: required because it appears within the type `std::sync::Arc&lt;futures::sync::mpsc::Inner&lt;std::boxed::Box&lt;[u8]&gt;&gt;&gt;`
+   = note: required because it appears within the type `futures::sync::mpsc::Receiver&lt;std::boxed::Box&lt;[u8]&gt;&gt;`
+   = note: required because it appears within the type `tokio_stdin_stdout::ThreadedStdin`
+   = note: required because it appears within the type `std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;`
+   = note: required because it appears within the type `tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;`
+   = note: required because it appears within the type `futures_util::compat::compat::Compat&lt;tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;, ()&gt;`
+
+error[E0277]: the trait bound `(dyn futures::task_impl::std::EventSet + 'static): std::marker::Unpin` is not satisfied in `futures_util::compat::compat::Compat&lt;tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;, ()&gt;`
+  --&gt; src/main.rs:35:38
+   |
+35 |             let guess = await!(lines.next())
+   |                                      ^^^^ within `futures_util::compat::compat::Compat&lt;tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;, ()&gt;`, the trait `std::marker::Unpin` is not implemented for `(dyn futures::task_impl::std::EventSet + 'static)`
+   |
+   = note: required because it appears within the type `std::marker::PhantomData&lt;(dyn futures::task_impl::std::EventSet + 'static)&gt;`
+   = note: required because it appears within the type `std::sync::Arc&lt;(dyn futures::task_impl::std::EventSet + 'static)&gt;`
+   = note: required because it appears within the type `futures::task_impl::std::UnparkEvent`
+   = note: required because it appears within the type `futures::task_impl::std::UnparkEvents`
+   = note: required because it appears within the type `futures::task_impl::Task`
+   = note: required because it appears within the type `std::option::Option&lt;futures::task_impl::Task&gt;`
+   = note: required because it appears within the type `futures::sync::mpsc::ReceiverTask`
+   = note: required because it appears within the type `std::cell::UnsafeCell&lt;futures::sync::mpsc::ReceiverTask&gt;`
+   = note: required because it appears within the type `std::sync::Mutex&lt;futures::sync::mpsc::ReceiverTask&gt;`
+   = note: required because it appears within the type `futures::sync::mpsc::Inner&lt;std::boxed::Box&lt;[u8]&gt;&gt;`
+   = note: required because it appears within the type `std::marker::PhantomData&lt;futures::sync::mpsc::Inner&lt;std::boxed::Box&lt;[u8]&gt;&gt;&gt;`
+   = note: required because it appears within the type `std::sync::Arc&lt;futures::sync::mpsc::Inner&lt;std::boxed::Box&lt;[u8]&gt;&gt;&gt;`
+   = note: required because it appears within the type `futures::sync::mpsc::Receiver&lt;std::boxed::Box&lt;[u8]&gt;&gt;`
+   = note: required because it appears within the type `tokio_stdin_stdout::ThreadedStdin`
+   = note: required because it appears within the type `std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;`
+   = note: required because it appears within the type `tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;`
+   = note: required because it appears within the type `futures_util::compat::compat::Compat&lt;tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;, ()&gt;`
+
+error[E0277]: the trait bound `(dyn futures::task_impl::std::Unpark + 'static): std::marker::Unpin` is not satisfied in `futures_util::compat::compat::Compat&lt;tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;, ()&gt;`
+  --&gt; src/main.rs:35:25
+   |
+35 |             let guess = await!(lines.next())
+   |                         ^^^^^^^^^^^^^^^^^^^^ within `futures_util::compat::compat::Compat&lt;tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;, ()&gt;`, the trait `std::marker::Unpin` is not implemented for `(dyn futures::task_impl::std::Unpark + 'static)`
+   |
+   = note: required because it appears within the type `std::marker::PhantomData&lt;(dyn futures::task_impl::std::Unpark + 'static)&gt;`
+   = note: required because it appears within the type `std::sync::Arc&lt;(dyn futures::task_impl::std::Unpark + 'static)&gt;`
+   = note: required because it appears within the type `futures::task_impl::std::TaskUnpark`
+   = note: required because it appears within the type `futures::task_impl::Task`
+   = note: required because it appears within the type `std::option::Option&lt;futures::task_impl::Task&gt;`
+   = note: required because it appears within the type `futures::sync::mpsc::ReceiverTask`
+   = note: required because it appears within the type `std::cell::UnsafeCell&lt;futures::sync::mpsc::ReceiverTask&gt;`
+   = note: required because it appears within the type `std::sync::Mutex&lt;futures::sync::mpsc::ReceiverTask&gt;`
+   = note: required because it appears within the type `futures::sync::mpsc::Inner&lt;std::boxed::Box&lt;[u8]&gt;&gt;`
+   = note: required because it appears within the type `std::marker::PhantomData&lt;futures::sync::mpsc::Inner&lt;std::boxed::Box&lt;[u8]&gt;&gt;&gt;`
+   = note: required because it appears within the type `std::sync::Arc&lt;futures::sync::mpsc::Inner&lt;std::boxed::Box&lt;[u8]&gt;&gt;&gt;`
+   = note: required because it appears within the type `futures::sync::mpsc::Receiver&lt;std::boxed::Box&lt;[u8]&gt;&gt;`
+   = note: required because it appears within the type `tokio_stdin_stdout::ThreadedStdin`
+   = note: required because it appears within the type `std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;`
+   = note: required because it appears within the type `tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;`
+   = note: required because it appears within the type `futures_util::compat::compat::Compat&lt;tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;, ()&gt;`
+   = note: required because of the requirements on the impl of `core::future::future::Future` for `futures_util::stream::next::Next&lt;'_, futures_util::compat::compat::Compat&lt;tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;, ()&gt;&gt;`
+   = note: required by `std::future::poll_in_task_cx`
+   = note: this error originates in a macro outside of the current crate (in Nightly builds, run with -Z external-macro-backtrace for more info)
+
+error[E0277]: the trait bound `(dyn futures::task_impl::UnsafeNotify + 'static): std::marker::Unpin` is not satisfied in `futures_util::compat::compat::Compat&lt;tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;, ()&gt;`
+  --&gt; src/main.rs:35:25
+   |
+35 |             let guess = await!(lines.next())
+   |                         ^^^^^^^^^^^^^^^^^^^^ within `futures_util::compat::compat::Compat&lt;tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;, ()&gt;`, the trait `std::marker::Unpin` is not implemented for `(dyn futures::task_impl::UnsafeNotify + 'static)`
+   |
+   = note: required because it appears within the type `*mut (dyn futures::task_impl::UnsafeNotify + 'static)`
+   = note: required because it appears within the type `futures::task_impl::NotifyHandle`
+   = note: required because it appears within the type `futures::task_impl::core::TaskUnpark`
+   = note: required because it appears within the type `futures::task_impl::std::TaskUnpark`
+   = note: required because it appears within the type `futures::task_impl::Task`
+   = note: required because it appears within the type `std::option::Option&lt;futures::task_impl::Task&gt;`
+   = note: required because it appears within the type `futures::sync::mpsc::ReceiverTask`
+   = note: required because it appears within the type `std::cell::UnsafeCell&lt;futures::sync::mpsc::ReceiverTask&gt;`
+   = note: required because it appears within the type `std::sync::Mutex&lt;futures::sync::mpsc::ReceiverTask&gt;`
+   = note: required because it appears within the type `futures::sync::mpsc::Inner&lt;std::boxed::Box&lt;[u8]&gt;&gt;`
+   = note: required because it appears within the type `std::marker::PhantomData&lt;futures::sync::mpsc::Inner&lt;std::boxed::Box&lt;[u8]&gt;&gt;&gt;`
+   = note: required because it appears within the type `std::sync::Arc&lt;futures::sync::mpsc::Inner&lt;std::boxed::Box&lt;[u8]&gt;&gt;&gt;`
+   = note: required because it appears within the type `futures::sync::mpsc::Receiver&lt;std::boxed::Box&lt;[u8]&gt;&gt;`
+   = note: required because it appears within the type `tokio_stdin_stdout::ThreadedStdin`
+   = note: required because it appears within the type `std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;`
+   = note: required because it appears within the type `tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;`
+   = note: required because it appears within the type `futures_util::compat::compat::Compat&lt;tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;, ()&gt;`
+   = note: required because of the requirements on the impl of `core::future::future::Future` for `futures_util::stream::next::Next&lt;'_, futures_util::compat::compat::Compat&lt;tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;, ()&gt;&gt;`
+   = note: required by `std::future::poll_in_task_cx`
+   = note: this error originates in a macro outside of the current crate (in Nightly builds, run with -Z external-macro-backtrace for more info)
+
+error[E0277]: the trait bound `(dyn futures::task_impl::std::EventSet + 'static): std::marker::Unpin` is not satisfied in `futures_util::compat::compat::Compat&lt;tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;, ()&gt;`
+  --&gt; src/main.rs:35:25
+   |
+35 |             let guess = await!(lines.next())
+   |                         ^^^^^^^^^^^^^^^^^^^^ within `futures_util::compat::compat::Compat&lt;tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;, ()&gt;`, the trait `std::marker::Unpin` is not implemented for `(dyn futures::task_impl::std::EventSet + 'static)`
+   |
+   = note: required because it appears within the type `std::marker::PhantomData&lt;(dyn futures::task_impl::std::EventSet + 'static)&gt;`
+   = note: required because it appears within the type `std::sync::Arc&lt;(dyn futures::task_impl::std::EventSet + 'static)&gt;`
+   = note: required because it appears within the type `futures::task_impl::std::UnparkEvent`
+   = note: required because it appears within the type `futures::task_impl::std::UnparkEvents`
+   = note: required because it appears within the type `futures::task_impl::Task`
+   = note: required because it appears within the type `std::option::Option&lt;futures::task_impl::Task&gt;`
+   = note: required because it appears within the type `futures::sync::mpsc::ReceiverTask`
+   = note: required because it appears within the type `std::cell::UnsafeCell&lt;futures::sync::mpsc::ReceiverTask&gt;`
+   = note: required because it appears within the type `std::sync::Mutex&lt;futures::sync::mpsc::ReceiverTask&gt;`
+   = note: required because it appears within the type `futures::sync::mpsc::Inner&lt;std::boxed::Box&lt;[u8]&gt;&gt;`
+   = note: required because it appears within the type `std::marker::PhantomData&lt;futures::sync::mpsc::Inner&lt;std::boxed::Box&lt;[u8]&gt;&gt;&gt;`
+   = note: required because it appears within the type `std::sync::Arc&lt;futures::sync::mpsc::Inner&lt;std::boxed::Box&lt;[u8]&gt;&gt;&gt;`
+   = note: required because it appears within the type `futures::sync::mpsc::Receiver&lt;std::boxed::Box&lt;[u8]&gt;&gt;`
+   = note: required because it appears within the type `tokio_stdin_stdout::ThreadedStdin`
+   = note: required because it appears within the type `std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;`
+   = note: required because it appears within the type `tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;`
+   = note: required because it appears within the type `futures_util::compat::compat::Compat&lt;tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;, ()&gt;`
+   = note: required because of the requirements on the impl of `core::future::future::Future` for `futures_util::stream::next::Next&lt;'_, futures_util::compat::compat::Compat&lt;tokio_io::lines::Lines&lt;std::io::BufReader&lt;tokio_stdin_stdout::ThreadedStdin&gt;&gt;, ()&gt;&gt;`
+   = note: required by `std::future::poll_in_task_cx`
+   = note: this error originates in a macro outside of the current crate (in Nightly builds, run with -Z external-macro-backtrace for more info)
+
+error: aborting due to 6 previous errors
+
+For more information about this error, try `rustc --explain E0277`.
+error: Could not compile `guessing_game`.
+
+To learn more, run the command again with --verbose.
+</code></pre>
+<p>ここでポイントは <code>the trait bound `~~~: std::marker::Unpin` is not satisfied</code> という部分です。 <code>Unpin</code> はasync/awaitのために新たに導入されたトレイトで、ムーブできない特殊な状況のために使われます。</p>
+<p>この場合、 <code>lines</code> がムーブされないことを保証する必要があるので、 <code>pin_mut!</code> マクロで固定してしまいます。</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#fn main() {
+#[macro_use]
+extern crate pin_utils;
+
+        // ...
+        let lines = tokio::io::lines(stdio).compat();
+
+        pin_mut!(lines);
+
+        println!(&quot;Guess the number!&quot;);
+        // ...
+#}</code></pre></pre>
+<p>これで標準入力が非同期になりました。</p>
+<a class="header" href="async-await.html#aここまでのソースコード" id="aここまでのソースコード"><h2>ここまでのソースコード</h2></a>
+<p><code>Cargo.toml</code></p>
+<pre><code class="language-toml">cargo-features = [&quot;edition&quot;]
+
+[package]
+name = &quot;guessing_game&quot;
+version = &quot;0.1.0&quot;
+authors = [&quot;Foo Bar &lt;foobar@example.com&gt;&quot;]
+
+edition = &quot;2018&quot;
+
+[dependencies]
+rand = &quot;0.4.0&quot;
+pin-utils = &quot;0.1.0-alpha.1&quot;
+futures-preview = { version = &quot;0.3.0-alpha.3&quot;, features = [&quot;tokio-compat&quot;] }
+tokio = &quot;0.1.7&quot;
+tokio-stdin-stdout = &quot;0.1.4&quot;
+</code></pre>
+<p><code>main.rs</code></p>
+<pre><pre class="playpen"><code class="language-rust">#![feature(async_await, await_macro, futures_api, pin)]
+
+#[macro_use]
+extern crate pin_utils;
+
+use futures::prelude::*;
+use tokio::prelude::{Stream as Stream01, Future as Future01, future as future01};
+
+use std::io::BufReader;
+use std::cmp::Ordering;
+use std::time::{Instant, Duration};
+use rand::Rng;
+use tokio::timer::{Delay, Interval};
+use futures::compat::{Future01CompatExt, Stream01CompatExt, TokioDefaultSpawn};
+
+fn main() {
+    tokio::run(async {
+        let interval = Interval::new(Instant::now(), Duration::from_millis(1000));
+
+        tokio::spawn(interval.for_each(|_| {
+            println!(&quot;foo&quot;);
+            future01::ok(())
+        }).map_err(|_| panic!(&quot;timer error&quot;)));
+
+        let stdio = tokio_stdin_stdout::stdin(0);
+        let stdio = BufReader::new(stdio);
+        let lines = tokio::io::lines(stdio).compat();
+
+        pin_mut!(lines);
+
+        println!(&quot;Guess the number!&quot;);
+
+        let secret_number = rand::thread_rng().gen_range(1, 101);
+
+        loop {
+            await!(Delay::new(Instant::now() + Duration::from_millis(500)).compat());
+
+            println!(&quot;Please input your guess.&quot;);
+
+            let guess = await!(lines.next())
+                .expect(&quot;End of input&quot;)
+                .expect(&quot;I/O error&quot;);
+
+            let guess: u32 = match guess.trim().parse() {
+                Ok(num) =&gt; num,
+                Err(_) =&gt; continue,
+            };
+
+            println!(&quot;You guessed: {}&quot;, guess);
+
+            match guess.cmp(&amp;secret_number) {
+                Ordering::Less =&gt; println!(&quot;Too small!&quot;),
+                Ordering::Greater =&gt; println!(&quot;Too big!&quot;),
+                Ordering::Equal =&gt; {
+                    println!(&quot;You win!&quot;);
+                    break;
+                }
+            }
+        }
+
+        Ok(())
+    }.boxed().compat(TokioDefaultSpawn));
+}
+</code></pre></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="tokio.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="tokio.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+            </nav>
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if (getComputedStyle(document.querySelector(".fa")).fontFamily !== "FontAwesome") {
+                var link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.type = 'text/css';
+                link.href = '_FontAwesome/css/font-awesome.css';
+                document.head.insertBefore(link, document.head.firstChild)
+            }
+        </script>
+
+        
+        <!-- Livereload script (if served using the cli tool) -->
+        <script type="text/javascript">
+            var socket = new WebSocket("ws://localhost:3001");
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload(true); // force reload from server (not from cache)
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+        
+
+        
+
+        
+
+        
+        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
+        
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
+
+    </body>
+</html>

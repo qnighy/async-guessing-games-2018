@@ -1,0 +1,364 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>2019年風のRustに衣替え - Guessing Games: Async</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <noscript>
+            <style type="text/css">
+                .javascript-only {
+                    display: none;
+                }
+            </style>
+        </noscript>
+
+    </head>
+    <body class="light">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme;
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li><a href="get-nightly.html"><strong aria-hidden="true">1.</strong> まずはnightlyを入れる</a></li><li><a href="edition-2018.html" class="active"><strong aria-hidden="true">2.</strong> 2019年風のRustに衣替え</a></li><li><a href="tokio.html"><strong aria-hidden="true">3.</strong> tokioのランタイムを起動する</a></li><li><a href="async-await.html"><strong aria-hidden="true">4.</strong> async/awaitを使う</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons javascript-only">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">Guessing Games: Async</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="searchbar-outer" class="searchbar-outer">
+                    <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                </div>
+                <div id="searchresults-outer" class="searchresults-outer">
+                    <div class="searchresults-header" id="searchresults-header"></div>
+                    <ul id="searchresults">
+                    </ul>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="edition-2018.html#a2019年風のrustに衣替え" id="a2019年風のrustに衣替え"><h1>2019年風のRustに衣替え</h1></a>
+<p>これを読んでいるあなたは、<strong>普通の</strong>数当てゲームを作り終えていることでしょう。その数当てゲームは……こんな感じでしたか?</p>
+<pre><pre class="playpen"><code class="language-rust">extern crate rand;
+
+use std::io;
+use std::cmp::Ordering;
+use rand::Rng;
+
+fn main() {
+    println!(&quot;Guess the number!&quot;);
+
+    let secret_number = rand::thread_rng().gen_range(1, 101);
+
+    loop {
+        println!(&quot;Please input your guess.&quot;);
+
+        let mut guess = String::new();
+
+        io::stdin().read_line(&amp;mut guess)
+            .expect(&quot;Failed to read line&quot;);
+
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) =&gt; num,
+            Err(_) =&gt; continue,
+        };
+
+        println!(&quot;You guessed: {}&quot;, guess);
+
+        match guess.cmp(&amp;secret_number) {
+            Ordering::Less =&gt; println!(&quot;Too small!&quot;),
+            Ordering::Greater =&gt; println!(&quot;Too big!&quot;),
+            Ordering::Equal =&gt; {
+                println!(&quot;You win!&quot;);
+                break;
+            }
+        }
+    }
+}
+</code></pre></pre>
+<p>これを非同期にしようと思いますが、その前に2019年に備えて、これを<strong>Rust2018</strong>に対応させましょう! (Rust2019じゃないよ)</p>
+<p>Rust2018はRust2015(現行のRust)にいくつかの非互換な変更を加えています。非互換というと聞こえは悪いですが。既存のRustエコシステムとの互換性はほぼ100%です! 各ライブラリの作者が、気が向いたときにRust2018に切り替えればいいだけです。コンパイラは両方のエディションをサポートしつづけますし、異なるエディションのライブラリも問題なく混在できます。</p>
+<p>それでは実際に<a href="https://rust-lang-nursery.github.io/edition-guide/editions/transitioning-your-code-to-a-new-edition.html">edition guideの記述</a>にしたがって、数当てゲームをRust2018に移行しましょう!</p>
+<a class="header" href="edition-2018.html#nightlyを有効化" id="nightlyを有効化"><h2>nightlyを有効化</h2></a>
+<p>Rust2018は2018年末に安定化される予定なので、まだnightlyが必要です。<a href="./get-nightly.md">前のセクション</a>で説明した方法で、nightlyを有効化しましょう。nightlyを新しめのものにするのも忘れずに。</p>
+<pre><code>$ rustup update nightly
+$ echo nightly &gt; rust-toolchain
+</code></pre>
+<a class="header" href="edition-2018.html#aプレビューモードを有効化" id="aプレビューモードを有効化"><h2>プレビューモードを有効化</h2></a>
+<p>不安定機能を使うにはもう一つ、<code>feature</code> を入れる必要がありました。そこで以下の行を先頭に追加します。</p>
+<pre><pre class="playpen"><code class="language-rust">
+# #![allow(unused_variables)]
+#![feature(rust_2018_preview)]
+
+#fn main() {
+...
+#}</code></pre></pre>
+<p>この時点ではまだRust2018にはなっていません。あくまで、2018を有効化する準備ができただけです。</p>
+<a class="header" href="edition-2018.html#rust2018対応版に変換" id="rust2018対応版に変換"><h2>Rust2018対応版に変換</h2></a>
+<p><code>cargo fix</code> を使うと、半自動で新しいRustのコードに変換することができます。実際にやってみましょう。</p>
+<pre><code>$ cargo fix --edition
+</code></pre>
+<p>何も起きませんでしたか? 今回は簡単な数当てゲームで、特に非互換な要素もありませんでした。ちなみに、より複雑なプロジェクトでは、非互換な部分が自動で修正されたり、自動修正できない部分については警告が表示されたりします。</p>
+<p>この時点では、「Rust2015でもRust2018でも動かせる状態」になっています。</p>
+<a class="header" href="edition-2018.html#rust2018に切り替え" id="rust2018に切り替え"><h2>Rust2018に切り替え</h2></a>
+<p><code>Cargo.toml</code> に以下の1行を追加することで、Rust2018への切り替えを指示できます。</p>
+<pre><code class="language-toml">[package]
+...
+edition = &quot;2018&quot;
+</code></pre>
+<p>ところが、この <code>edition = ...</code> という機能自体もcargoの不安定機能です。そこで、 <code>cargo-features = [&quot;edition&quot;]</code> を<strong>先頭に</strong>追加する必要があります。結果として、 <code>Cargo.toml</code> は以下のようになります。</p>
+<pre><code class="language-toml">cargo-features = [&quot;edition&quot;]
+
+[package]
+name = &quot;guessing_game&quot;
+version = &quot;0.1.0&quot;
+authors = [&quot;Foo Bar &lt;foobar@example.com&gt;&quot;]
+
+edition = &quot;2018&quot;
+
+[dependencies]
+rand = &quot;0.4.0&quot;
+</code></pre>
+<a class="header" href="edition-2018.html#rust2018らしい書き方にする" id="rust2018らしい書き方にする"><h2>Rust2018らしい書き方にする</h2></a>
+<p>Rust2018では推奨されている作法も少し変化しています。これに対応するには <code>cargo fix --edition-idioms</code> を実行します。</p>
+<pre><code>$ cargo fix --edition-idioms
+</code></pre>
+<p>こうすると、Rust2018的でない作法が半自動で修正されます。</p>
+<p>数当ての場合は、はじめに書いた <code>#![feature(rust_2018_preview)]</code> と、 <code>extern crate rand;</code> の削除が指示されると思います。</p>
+<p>結局、以下のように、 <code>extern crate</code> が削除された状態に落ち着くことになりました。</p>
+<pre><pre class="playpen"><code class="language-rust">use std::io;
+use std::cmp::Ordering;
+use rand::Rng;
+
+fn main() {
+    println!(&quot;Guess the number!&quot;);
+
+    let secret_number = rand::thread_rng().gen_range(1, 101);
+
+    loop {
+        println!(&quot;Please input your guess.&quot;);
+
+        let mut guess = String::new();
+
+        io::stdin().read_line(&amp;mut guess)
+            .expect(&quot;Failed to read line&quot;);
+
+        let guess: u32 = match guess.trim().parse() {
+            Ok(num) =&gt; num,
+            Err(_) =&gt; continue,
+        };
+
+        println!(&quot;You guessed: {}&quot;, guess);
+
+        match guess.cmp(&amp;secret_number) {
+            Ordering::Less =&gt; println!(&quot;Too small!&quot;),
+            Ordering::Greater =&gt; println!(&quot;Too big!&quot;),
+            Ordering::Equal =&gt; {
+                println!(&quot;You win!&quot;);
+                break;
+            }
+        }
+    }
+}
+</code></pre></pre>
+<p>この <strong><code>extern crate</code> が要らなくなる</strong>のはRust2018の嬉しい点のひとつです。同じことを2回書かなくてすむようになります。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="get-nightly.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="tokio.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a href="get-nightly.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a href="tokio.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if (getComputedStyle(document.querySelector(".fa")).fontFamily !== "FontAwesome") {
+                var link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.type = 'text/css';
+                link.href = '_FontAwesome/css/font-awesome.css';
+                document.head.insertBefore(link, document.head.firstChild)
+            }
+        </script>
+
+        
+        <!-- Livereload script (if served using the cli tool) -->
+        <script type="text/javascript">
+            var socket = new WebSocket("ws://localhost:3001");
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload(true); // force reload from server (not from cache)
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+        
+
+        
+
+        
+
+        
+        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
+        
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
+
+    </body>
+</html>

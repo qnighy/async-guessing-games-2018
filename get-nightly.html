@@ -1,0 +1,279 @@
+<!DOCTYPE HTML>
+<html lang="en" class="sidebar-visible">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>まずはnightlyを入れる - Guessing Games: Async</title>
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        <base href="">
+
+        <link rel="stylesheet" href="book.css">
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+        <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro:500" rel="stylesheet" type="text/css">
+
+        <link rel="shortcut icon" href="favicon.png">
+
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+
+        <link rel="stylesheet" href="highlight.css">
+        <link rel="stylesheet" href="tomorrow-night.css">
+        <link rel="stylesheet" href="ayu-highlight.css">
+
+        <!-- Custom theme -->
+        
+
+        
+
+        <!-- Fetch Clipboard.js from CDN but have a local fallback -->
+        <script src="https://cdn.jsdelivr.net/clipboard.js/1.6.1/clipboard.min.js"></script>
+        <script>
+            if (typeof Clipboard == 'undefined') {
+                document.write(unescape("%3Cscript src='clipboard.min.js'%3E%3C/script%3E"));
+            }
+        </script>
+
+        <noscript>
+            <style type="text/css">
+                .javascript-only {
+                    display: none;
+                }
+            </style>
+        </noscript>
+
+    </head>
+    <body class="light">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { } 
+            if (theme === null || theme === undefined) { theme = 'light'; }
+            document.body.className = theme;
+            document.querySelector('html').className = theme;
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <ol class="chapter"><li><a href="get-nightly.html" class="active"><strong aria-hidden="true">1.</strong> まずはnightlyを入れる</a></li><li><a href="edition-2018.html"><strong aria-hidden="true">2.</strong> 2019年風のRustに衣替え</a></li><li><a href="tokio.html"><strong aria-hidden="true">3.</strong> tokioのランタイムを起動する</a></li><li><a href="async-await.html"><strong aria-hidden="true">4.</strong> async/awaitを使う</a></li></ol>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar" class="menu-bar">
+                    <div id="menu-bar-sticky-container">
+                        <div class="left-buttons javascript-only">
+                            <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                                <i class="fa fa-bars"></i>
+                            </button>
+                            <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                                <i class="fa fa-paint-brush"></i>
+                            </button>
+                            <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                                <li role="none"><button role="menuitem" class="theme" id="light">Light <span class="default">(default)</span></button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                                <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                            </ul>
+                            
+                            <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            
+                        </div>
+
+                        <h1 class="menu-title">Guessing Games: Async</h1> 
+
+                        <div class="right-buttons">
+                            <a href="print.html" title="Print this book" aria-label="Print this book">
+                                <i id="print-button" class="fa fa-print"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                
+                <div id="searchbar-outer" class="searchbar-outer">
+                    <input type="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                </div>
+                <div id="searchresults-outer" class="searchresults-outer">
+                    <div class="searchresults-header" id="searchresults-header"></div>
+                    <ul id="searchresults">
+                    </ul>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <a class="header" href="get-nightly.html#aまずはnightlyを入れる" id="aまずはnightlyを入れる"><h1>まずはnightlyを入れる</h1></a>
+<p>みなさん、<a href="https://doc.rust-lang.org/book/second-edition/ch02-00-guessing-game-tutorial.html">TRPLの2章</a>は読みおえましたか? 今日やる内容を終えてしまって暇ですか? それではこの本で<strong>フューチャーな</strong>数当てゲームを作っていきましょう!</p>
+<p>Rustの未来へ駆けぬけるために、まずは<strong>nightlyコンパイラ</strong>のインストールをしましょう。 nightlyは<a href="https://doc.rust-lang.org/book/second-edition/appendix-07-nightly-rust.html">夜ごと生成されるナウでヤングな最先端バージョン</a>のことです。</p>
+<pre><code>$ rustup toolchain install nightly
+</code></pre>
+<a class="header" href="get-nightly.html#nightlyツールチェインを使う" id="nightlyツールチェインを使う"><h2>nightlyツールチェインを使う</h2></a>
+<p>nightlyツールチェインを使うには3種類の方法があります。</p>
+<a class="header" href="get-nightly.html#nightly-を指定する" id="nightly-を指定する"><h3><code>+nightly</code> を指定する</h3></a>
+<p>皆さんが触っている <code>rustc</code> や <code>cargo</code> などのコマンドは rustup によってラップされており、 <code>+version</code> オプションにより指定のツールチェインで起動することができます。</p>
+<pre><code>$ rustc +nightly --version
+rustc 1.30.0-nightly (33b923fd4 2018-08-18)
+$ rustc --version
+rustc 1.28.0 (9634041f0 2018-07-30)
+</code></pre>
+<a class="header" href="get-nightly.html#rust-toolchain-ファイルを使う" id="rust-toolchain-ファイルを使う"><h3><code>rust-toolchain</code> ファイルを使う</h3></a>
+<p><code>rust-toolchain</code> ファイルを置いておくと、その指定が使われます。</p>
+<pre><code>$ echo nightly &gt; rust-toolchain
+$ rustc --version
+rustc 1.30.0-nightly (33b923fd4 2018-08-18)
+$ rm rust-toolchain
+$ rustc --version
+rustc 1.28.0 (9634041f0 2018-07-30)
+</code></pre>
+<a class="header" href="get-nightly.html#rustup-override-を使う" id="rustup-override-を使う"><h3><code>rustup override</code> を使う</h3></a>
+<p>特定ディレクトリのバージョンを固定する別の方法です。バージョン情報は <code>~/.rustup/settings.toml</code> に集約されます。</p>
+<pre><code>$ rustup override set nightly
+$ rustc --version
+rustc 1.30.0-nightly (33b923fd4 2018-08-18)
+$ rustup override unset
+$ rustc --version
+</code></pre>
+<a class="header" href="get-nightly.html#nightlyツールチェインを更新する" id="nightlyツールチェインを更新する"><h2>nightlyツールチェインを更新する</h2></a>
+<p><code>rustup update</code> によりnightlyツールチェインも更新されます。ほぼ毎日更新されるので、特定バージョンを使い続けたい場合は <code>nightly-2018-08-05</code> のように日付つきのツールチェインを指定することもできます。(存在しない日付もあります)</p>
+<a class="header" href="get-nightly.html#nightlyツールチェインでできること" id="nightlyツールチェインでできること"><h2>nightlyツールチェインでできること</h2></a>
+<p>nightlyツールチェインではRustの<strong>最新機能</strong> (不安定機能) を使うことができます。たとえば以下のコードは安定版コンパイラでは意図的に禁止されていますが、nightlyツールチェインではコンパイルできます。</p>
+<pre><pre class="playpen"><code class="language-rust">// vec_resize_default という不安定機能を使うことを宣言する
+#![feature(vec_resize_default)]
+
+fn main() {
+    let mut v = vec![1, 2, 3];
+    // この関数は不安定
+    v.resize_default(5);
+    assert_eq!(v, [1, 2, 3, 0, 0]);
+}
+</code></pre></pre>
+<p>なぜ禁止されているのか? それは、この機能を<strong>この形で提供しつづける(安定化する)合意がまだとれていない</strong>からです。つまり、このような最新機能は<a href="https://github.com/rust-lang/rust/pull/53227">設計が変更されたり</a>、ときには<a href="https://github.com/rust-lang/rust/pull/48333">その機能が丸ごと削除されてしまう</a>かもしれないということです。</p>
+<p>とはいっても、既存のコードが全く立ち行かなくなるような根本的なちゃぶ台返しはさすがに行われないでしょう。基本的には、新しい仕様への追従を迫られたり、今まで便利にやっていた方法が使えなくなったりするだけです。</p>
+<p>これら不安定機能は<a href="https://doc.rust-lang.org/unstable-book/index.html">The Unstable Book</a>で解説されているほか、その安定化の状況を<a href="https://forge.rust-lang.org/state-of-rust.html">State of Rust</a>で確認できます。</p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+
+                        
+                            <a rel="next" href="edition-2018.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+
+                
+                    <a href="edition-2018.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+
+        <!-- Local fallback for Font Awesome -->
+        <script>
+            if (getComputedStyle(document.querySelector(".fa")).fontFamily !== "FontAwesome") {
+                var link = document.createElement('link');
+                link.rel = 'stylesheet';
+                link.type = 'text/css';
+                link.href = '_FontAwesome/css/font-awesome.css';
+                document.head.insertBefore(link, document.head.firstChild)
+            }
+        </script>
+
+        
+        <!-- Livereload script (if served using the cli tool) -->
+        <script type="text/javascript">
+            var socket = new WebSocket("ws://localhost:3001");
+            socket.onmessage = function (event) {
+                if (event.data === "reload") {
+                    socket.close();
+                    location.reload(true); // force reload from server (not from cache)
+                }
+            };
+
+            window.onbeforeunload = function() {
+                socket.close();
+            }
+        </script>
+        
+
+        
+
+        
+
+        
+        <script src="searchindex.js" type="text/javascript" charset="utf-8"></script>
+        
+        
+        <script src="elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        
+
+        <script src="highlight.js"></script>
+        <script src="book.js"></script>
+
+        <!-- Custom JS script -->
+        
+
+    </body>
+</html>
