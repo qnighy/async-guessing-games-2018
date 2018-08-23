@@ -72,7 +72,7 @@ fn main() {
         // ...
 
         Ok(())
-    }.boxed().compat());
+    }.boxed().compat(TokioDefaultSpawn));
 }
 ```
 
